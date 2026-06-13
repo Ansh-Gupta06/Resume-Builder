@@ -83,6 +83,13 @@ const defaultPersonalInfo: PersonalInfo = {
   github: '',
   avatar: '',
   summary: '',
+  wechat: '',
+  age: '',
+  gender: '',
+  hometown: '',
+  maritalStatus: '',
+  yearsOfExperience: '',
+  educationLevel: '',
 }
 
 const defaultSections: ResumeSectionKey[] = [
@@ -139,7 +146,7 @@ export const useResumeStore = create<ResumeStore>()(
       activeResumeId: null,
       isLoading: false,
 
-      createResume: (title, templateId = 'default') => {
+      createResume: (title, templateId = 'modern') => {
         const resume = buildResume(title, templateId)
         set(
           produce((state: ResumeStore) => {

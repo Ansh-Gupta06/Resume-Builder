@@ -129,7 +129,7 @@ export default function DashboardPage() {
 
   const [showCreate, setShowCreate] = useState(false)
   const [newTitle, setNewTitle] = useState('')
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('default')
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('modern')
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const handleCreate = useCallback(() => {
@@ -137,7 +137,7 @@ export default function DashboardPage() {
     const id = createResume(trimmed, selectedTemplate)
     setShowCreate(false)
     setNewTitle('')
-    setSelectedTemplate('default')
+    setSelectedTemplate('modern')
     toast.success('Resume created')
     navigate(ROUTES.EDITOR(id))
   }, [newTitle, selectedTemplate, createResume, navigate])

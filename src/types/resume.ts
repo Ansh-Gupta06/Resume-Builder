@@ -9,6 +9,13 @@ export type PersonalInfo = {
   github: string
   avatar: string
   summary: string
+  wechat: string
+  age: string
+  gender: string
+  hometown: string
+  maritalStatus: string
+  yearsOfExperience: string
+  educationLevel: string
 }
 
 export type Experience = {
