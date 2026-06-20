@@ -9,6 +9,7 @@ import Card from '@/components/Card'
 import Modal from '@/components/Modal'
 import Input from '@/components/Input'
 import { getTemplate } from '@/templates/registry-utils'
+import { normalizeResume } from '@/templates/normalize'
 import type { Resume } from '@/types/resume'
 import { MOCK_RESUME } from '@/utils/mock-resume'
 
@@ -66,13 +67,14 @@ function ResumeCard({ resume, onDuplicate, onDelete }: ResumeCardProps) {
   }).format(new Date(resume.updatedAt))
 
   const TemplateComponent = getTemplate(resume.templateId as TemplateId).component
+  const normalizedResume = normalizeResume(resume)
 
   return (
     <Card hover className="group flex flex-col gap-4">
       <Link to={ROUTES.EDITOR(resume.id)} className="block">
         <div className="w-full h-44 rounded-lg bg-neutral-900 overflow-hidden relative border border-neutral-700/40 group-hover:border-primary-500/20 transition-colors duration-200">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[794px] h-[1123px] origin-top scale-[0.20] pointer-events-none bg-white">
-            <TemplateComponent resume={resume} />
+            <TemplateComponent resume={normalizedResume} />
           </div>
           <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
             <span className="text-xs font-medium text-white/90 capitalize drop-shadow-md">{resume.templateId}</span>
