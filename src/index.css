@@ -165,9 +165,26 @@
 .pdf-page-break-avoid {
   page-break-inside: avoid;
   break-inside: avoid;
+  -webkit-column-break-inside: avoid;
 }
 
 .pdf-page-break-before {
   page-break-before: always;
   break-before: page;
-}
+}
+
+.pdf-page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
+
+.pdf-no-shadow {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.pdf-exact-color {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+}

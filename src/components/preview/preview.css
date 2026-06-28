@@ -295,10 +295,13 @@
   color: #000000;
   transform-origin: top left;
   will-change: transform;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .preview-a4 * {
   color: inherit;
+  box-sizing: border-box;
 }
 
 /* ─── Template Transition ─────────────────────────── */

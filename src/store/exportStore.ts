@@ -24,6 +24,8 @@ export const useExportStore = create<ExportStore>((set) => ({
 
     try {
       set({ status: 'rendering' })
+      await new Promise<void>(resolve => { requestAnimationFrame(() => { resolve() }) })
+      set({ status: 'generating' })
       await exportToPdf(resumeTitle, resumeId)
       set({ status: 'done', error: null })
     } catch (err) {
