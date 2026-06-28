@@ -1,0 +1,239 @@
+@media print {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html,
+  body {
+    width: 210mm !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+
+  body > *:not([data-pdf-target]) {
+    display: none !important;
+  }
+
+  [data-pdf-target] {
+    display: block !important;
+    position: static !important;
+    transform: none !important;
+    width: 210mm !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+}
+
+.pdf-export-root {
+  position: static !important;
+  transform: none !important;
+  transform-origin: unset !important;
+  width: 794px !important;
+  min-height: auto !important;
+  overflow: visible !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.pdf-export-root *,
+.pdf-export-root *::before,
+.pdf-export-root *::after {
+  box-sizing: border-box !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+
+.pdf-export-root [style*="animation"],
+.pdf-export-root [style*="transition"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+.pdf-page-break-avoid {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  -webkit-column-break-inside: avoid !important;
+}
+
+.pdf-page-break-before {
+  page-break-before: always !important;
+  break-before: page !important;
+}
+
+.pdf-page-break-after {
+  page-break-after: always !important;
+  break-after: page !important;
+}
+
+[data-section] {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+.pdf-export-root h1,
+.pdf-export-root h2,
+.pdf-export-root h3,
+.pdf-export-root h4,
+.pdf-export-root h5,
+.pdf-export-root h6 {
+  page-break-after: avoid !important;
+  break-after: avoid !important;
+  orphans: 3 !important;
+  widows: 3 !important;
+}
+
+.pdf-export-root p,
+.pdf-export-root li {
+  orphans: 2 !important;
+  widows: 2 !important;
+}
+
+.pdf-export-root img {
+  max-width: 100% !important;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  display: block !important;
+}
+
+.pdf-export-root a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.pdf-font-inter {
+  font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+.pdf-font-serif {
+  font-family: 'Georgia', 'Times New Roman', 'Times', serif !important;
+}
+
+.pdf-font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace !important;
+}
+
+.pdf-export-root .shadow-lg,
+.pdf-export-root .shadow-md,
+.pdf-export-root .shadow-sm,
+.pdf-export-root .shadow {
+  box-shadow: none !important;
+}
+
+.pdf-export-root [class*="animate-"],
+.pdf-export-root [class*="transition-"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+.pdf-section-header {
+  page-break-after: avoid !important;
+  break-after: avoid !important;
+  margin-bottom: 6pt !important;
+}
+
+.pdf-section-body {
+  page-break-before: avoid !important;
+  break-before: avoid !important;
+}
+
+.pdf-experience-item,
+.pdf-education-item,
+.pdf-project-item,
+.pdf-certification-item,
+.pdf-award-item {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  margin-bottom: 8pt !important;
+}
+
+.pdf-two-col-left {
+  float: left !important;
+  width: 33% !important;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+.pdf-two-col-right {
+  float: right !important;
+  width: 64% !important;
+}
+
+.pdf-clearfix::after {
+  content: '' !important;
+  display: table !important;
+  clear: both !important;
+}
+
+.pdf-export-root [class*="backdrop-blur"],
+.pdf-export-root [class*="blur"] {
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
+.pdf-export-root [class*="overflow-hidden"] {
+  overflow: visible !important;
+}
+
+.pdf-export-root [class*="sticky"],
+.pdf-export-root [class*="fixed"] {
+  position: static !important;
+}
+
+.pdf-header-modern {
+  background-attachment: local !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.pdf-header-minimal {
+  border-bottom: 1pt solid #e4e4e7 !important;
+  padding-bottom: 8pt !important;
+  margin-bottom: 12pt !important;
+}
+
+.pdf-header-professional {
+  border-top-width: 4pt !important;
+  border-top-style: solid !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.pdf-tag {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  display: inline-block !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.pdf-skill-bar {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
