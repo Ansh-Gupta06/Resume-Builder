@@ -6,6 +6,9 @@ import {
   signOut,
   sendPasswordResetEmail,
   updateProfile,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   onAuthStateChanged,
   type User as FirebaseUser,
   type Unsubscribe,
@@ -69,6 +72,35 @@ function onSessionChange(callback: (user: AuthUser | null) => void): Unsubscribe
   })
 }
 
+async function updateUserProfile(name: string, photoURL?: string | null): Promise<AuthUser> {
+  const user = auth.currentUser
+  if (!user) throw new Error('No authenticated user')
+  await updateProfile(user, {
+    displayName: name,
+    ...(photoURL !== undefined ? { photoURL: photoURL ?? undefined } : {}),
+  })
+  return mapFirebaseUser(user)
+}
+
+async function reauthenticate(currentPassword: string): Promise<void> {
+  const user = auth.currentUser
+  if (!user || !user.email) throw new Error('No authenticated user')
+  const credential = EmailAuthProvider.credential(user.email, currentPassword)
+  await reauthenticateWithCredential(user, credential)
+}
+
+async function changePassword(newPassword: string): Promise<void> {
+  const user = auth.currentUser
+  if (!user) throw new Error('No authenticated user')
+  await updatePassword(user, newPassword)
+}
+
+function isPasswordProvider(): boolean {
+  return (
+    auth.currentUser?.providerData.some(p => p.providerId === 'password') ?? false
+  )
+}
+
 export const authService = {
   register,
   login,
@@ -77,4 +109,9 @@ export const authService = {
   sendPasswordReset,
   getCurrentUser,
   onSessionChange,
+  updateUserProfile,
+  reauthenticate,
+  changePassword,
+  isPasswordProvider,
 }
+

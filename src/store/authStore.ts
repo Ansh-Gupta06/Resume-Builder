@@ -14,6 +14,7 @@ type AuthState = {
 
 type AuthActions = {
   setUser: (user: AuthUser) => void
+  updateUser: (partial: Partial<AuthUser>) => void
   clearUser: () => void
   setStatus: (status: AuthStatus) => void
   setError: (error: string | null) => void
@@ -42,6 +43,11 @@ export const useAuthStore = create<AuthStore>()(
           error: null,
           sessionChecked: true,
         }),
+
+      updateUser: partial =>
+        set(state => ({
+          user: state.user ? { ...state.user, ...partial } : state.user,
+        })),
 
       clearUser: () =>
         set({
