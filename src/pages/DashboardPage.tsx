@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore, selectUser } from '@/store/authStore'
 import { useResumeStore } from '@/store/resumeStore'
+import { useResumeData } from '@/hooks/useResumeData'
 import { ROUTES, TEMPLATE_IDS, type TemplateId } from '@/constants'
 import { toast } from '@/store/toastStore'
 import Button from '@/components/Button'
@@ -12,8 +13,6 @@ import { getTemplate } from '@/templates/registry-utils'
 import { normalizeResume } from '@/templates/normalize'
 import type { Resume } from '@/types/resume'
 import { MOCK_RESUME } from '@/utils/mock-resume'
-
-
 
 function EmptyState({ onCreate }: { onCreate: () => void }) {
   return (
@@ -53,6 +52,21 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
   )
 }
 
+function ResumeCardSkeleton() {
+  return (
+    <div className="rounded-xl border border-neutral-700/40 bg-neutral-800/30 animate-pulse flex flex-col gap-4 p-4">
+      <div className="w-full h-44 rounded-lg bg-neutral-700/40" />
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+          <div className="h-3.5 w-3/4 rounded bg-neutral-700/50" />
+          <div className="h-2.5 w-1/2 rounded bg-neutral-700/40" />
+        </div>
+        <div className="h-7 w-14 rounded bg-neutral-700/40 shrink-0" />
+      </div>
+    </div>
+  )
+}
+
 type ResumeCardProps = {
   resume: Resume
   onDuplicate: (id: string) => void
@@ -66,8 +80,7 @@ function ResumeCard({ resume, onDuplicate, onDelete }: ResumeCardProps) {
     year: 'numeric',
   }).format(new Date(resume.updatedAt))
 
-  const config = getTemplate(resume.templateId as TemplateId) || getTemplate('modern')
-  const TemplateComponent = config.component
+  const TemplateComponent = getTemplate(resume.templateId as TemplateId).component
   const normalizedResume = normalizeResume(resume)
 
   return (
@@ -119,44 +132,65 @@ function ResumeCard({ resume, onDuplicate, onDelete }: ResumeCardProps) {
 
 export default function DashboardPage() {
   const user = useAuthStore(selectUser)
-  const { resumes } = useResumeStore()
-  const createResume = useResumeStore((s) => s.createResume)
-  const duplicateResume = useResumeStore((s) => s.duplicateResume)
-  const deleteResume = useResumeStore((s) => s.deleteResume)
+  const syncCreate = useResumeStore(s => s.syncCreate)
+  const syncDuplicate = useResumeStore(s => s.syncDuplicate)
+  const syncDelete = useResumeStore(s => s.syncDelete)
   const navigate = useNavigate()
+
+  const { resumes, stats, isLoading } = useResumeData()
 
   const [showCreate, setShowCreate] = useState(false)
   const [newTitle, setNewTitle] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('modern')
   const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [isCreating, setIsCreating] = useState(false)
+  const [isDuplicating, setIsDuplicating] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
-  const handleCreate = useCallback(() => {
+  const handleCreate = useCallback(async () => {
+    if (!user?.id || isCreating) return
     const trimmed = newTitle.trim() || 'Untitled Resume'
-    const id = createResume(trimmed, selectedTemplate)
-    setShowCreate(false)
-    setNewTitle('')
-    setSelectedTemplate('modern')
-    toast.success('Resume created')
-    navigate(ROUTES.EDITOR(id))
-  }, [newTitle, selectedTemplate, createResume, navigate])
+    setIsCreating(true)
+    try {
+      const id = await syncCreate(user.id, trimmed, selectedTemplate)
+      setShowCreate(false)
+      setNewTitle('')
+      setSelectedTemplate('modern')
+      toast.success('Resume created')
+      navigate(ROUTES.EDITOR(id))
+    } catch {
+      toast.error('Failed to create resume')
+    } finally {
+      setIsCreating(false)
+    }
+  }, [user?.id, newTitle, selectedTemplate, syncCreate, navigate, isCreating])
 
-  const handleDuplicate = useCallback(
-    (id: string) => {
-      const newId = duplicateResume(id)
-      if (newId) {
-        toast.success('Resume duplicated')
-      }
-    },
-    [duplicateResume]
-  )
+  const handleDuplicate = useCallback(async (id: string) => {
+    if (!user?.id || isDuplicating) return
+    setIsDuplicating(true)
+    try {
+      const newId = await syncDuplicate(user.id, id)
+      if (newId) toast.success('Resume duplicated')
+    } catch {
+      toast.error('Failed to duplicate resume')
+    } finally {
+      setIsDuplicating(false)
+    }
+  }, [user?.id, syncDuplicate, isDuplicating])
 
-  const handleConfirmDelete = useCallback(() => {
-    if (deleteId) {
-      deleteResume(deleteId)
+  const handleConfirmDelete = useCallback(async () => {
+    if (!user?.id || !deleteId || isDeleting) return
+    setIsDeleting(true)
+    try {
+      await syncDelete(user.id, deleteId)
       setDeleteId(null)
       toast.info('Resume deleted')
+    } catch {
+      toast.error('Failed to delete resume')
+    } finally {
+      setIsDeleting(false)
     }
-  }, [deleteId, deleteResume])
+  }, [user?.id, deleteId, syncDelete, isDeleting])
 
   const greeting = (() => {
     const hour = new Date().getHours()
@@ -187,11 +221,11 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
         {[
-          { label: 'Total Resumes', value: resumes.length, icon: '📄' },
-          { label: 'Templates Used', value: new Set(resumes.map((r) => r.templateId)).size, icon: '🎨' },
-          { label: 'Last Active', value: resumes.length > 0 ? 'Today' : '—', icon: '🕐' },
-          { label: 'Profile', value: '100%', icon: '✅' },
-        ].map((stat) => (
+          { label: 'Total Resumes', value: stats.total, icon: '📄' },
+          { label: 'Templates Used', value: stats.templatesUsed, icon: '🎨' },
+          { label: 'Updated Recently', value: stats.recentlyUpdated, icon: '🕐' },
+          { label: 'Last Active', value: stats.lastActiveLabel, icon: '✅' },
+        ].map(stat => (
           <Card key={stat.label} padding="sm" className="flex flex-col gap-1">
             <span className="text-lg">{stat.icon}</span>
             <span className="text-xl font-bold text-neutral-50">{stat.value}</span>
@@ -210,15 +244,21 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {resumes.length === 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <ResumeCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : resumes.length === 0 ? (
           <EmptyState onCreate={() => { setShowCreate(true) }} />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {resumes.map((resume) => (
+            {resumes.map(resume => (
               <ResumeCard
                 key={resume.id}
                 resume={resume}
-                onDuplicate={handleDuplicate}
+                onDuplicate={(id) => { void handleDuplicate(id) }}
                 onDelete={(id) => { setDeleteId(id) }}
               />
             ))}
@@ -241,7 +281,7 @@ export default function DashboardPage() {
             autoFocus
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleCreate()
+                void handleCreate()
               }
             }}
           />
@@ -249,7 +289,7 @@ export default function DashboardPage() {
           <div className="flex flex-col gap-2">
             <span className="label-base">Template</span>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
-              {TEMPLATE_IDS.map((tpl) => {
+              {TEMPLATE_IDS.map(tpl => {
                 const TemplateComponent = getTemplate(tpl).component
                 return (
                   <button
@@ -279,8 +319,13 @@ export default function DashboardPage() {
             <Button variant="ghost" size="md" onClick={() => { setShowCreate(false) }}>
               Cancel
             </Button>
-            <Button variant="primary" size="md" onClick={handleCreate}>
-              Create Resume
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => { void handleCreate() }}
+              disabled={isCreating}
+            >
+              {isCreating ? 'Creating…' : 'Create Resume'}
             </Button>
           </div>
         </div>
@@ -300,8 +345,13 @@ export default function DashboardPage() {
             <Button variant="ghost" size="sm" onClick={() => { setDeleteId(null) }}>
               Cancel
             </Button>
-            <Button variant="danger" size="sm" onClick={handleConfirmDelete}>
-              Delete
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => { void handleConfirmDelete() }}
+              disabled={isDeleting}
+            >
+              {isDeleting ? 'Deleting…' : 'Delete'}
             </Button>
           </div>
         </div>

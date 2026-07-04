@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { produce } from 'immer'
 import { STORAGE_KEYS, type ResumeSectionKey, type TemplateId } from '@/constants'
 import { generateId } from '@/utils'
+import { resumeService } from '@/services/resumeService'
 import type {
   Resume,
   PersonalInfo,
@@ -28,6 +29,12 @@ type ResumeActions = {
   deleteResume: (id: string) => void
   resetResume: (id: string) => void
   setActiveResume: (id: string | null) => void
+
+  loadResumes: (uid: string) => Promise<void>
+  syncCreate: (uid: string, title: string, templateId?: TemplateId) => Promise<string>
+  syncUpdate: (uid: string, resumeId: string, updates: Partial<Omit<Resume, 'id' | 'createdAt'>>) => Promise<void>
+  syncDelete: (uid: string, resumeId: string) => Promise<void>
+  syncDuplicate: (uid: string, resumeId: string) => Promise<string>
 
   updatePersonalInfo: (resumeId: string, data: Partial<PersonalInfo>) => void
 
@@ -590,6 +597,92 @@ export const useResumeStore = create<ResumeStore>()(
             state.isLoading = isLoading
           })
         )
+      },
+
+      loadResumes: async uid => {
+        set(produce((s: ResumeStore) => { s.isLoading = true }))
+        try {
+          const resumes = await resumeService.fetchResumes(uid)
+          set(produce((s: ResumeStore) => {
+            s.resumes = resumes
+            s.isLoading = false
+          }))
+        } catch (err) {
+          set(produce((s: ResumeStore) => { s.isLoading = false }))
+          throw err
+        }
+      },
+
+      syncCreate: async (uid, title, templateId = 'modern') => {
+        const resume = buildResume(title, templateId)
+        set(produce((s: ResumeStore) => {
+          s.resumes.unshift(resume)
+          s.activeResumeId = resume.id
+        }))
+        try {
+          await resumeService.createResume(uid, resume)
+        } catch (err) {
+          set(produce((s: ResumeStore) => {
+            s.resumes = s.resumes.filter(r => r.id !== resume.id)
+            s.activeResumeId = s.resumes[0]?.id ?? null
+          }))
+          throw err
+        }
+        return resume.id
+      },
+
+      syncUpdate: async (uid, resumeId, updates) => {
+        const prev = get().resumes.find(r => r.id === resumeId)
+        if (!prev) return
+        set(produce((s: ResumeStore) => {
+          const r = findResume(s, resumeId)
+          if (!r) return
+          Object.assign(r, updates)
+          touch(r)
+        }))
+        try {
+          await resumeService.updateResume(uid, resumeId, updates)
+        } catch (err) {
+          set(produce((s: ResumeStore) => {
+            const r = findResume(s, resumeId)
+            if (!r) return
+            Object.assign(r, prev)
+          }))
+          throw err
+        }
+      },
+
+      syncDelete: async (uid, resumeId) => {
+        const snapshot = get().resumes.slice()
+        set(produce((s: ResumeStore) => {
+          s.resumes = s.resumes.filter(r => r.id !== resumeId)
+          if (s.activeResumeId === resumeId) {
+            s.activeResumeId = s.resumes[0]?.id ?? null
+          }
+        }))
+        try {
+          await resumeService.deleteResume(uid, resumeId)
+        } catch (err) {
+          set(produce((s: ResumeStore) => { s.resumes = snapshot }))
+          throw err
+        }
+      },
+
+      syncDuplicate: async (uid, resumeId) => {
+        const source = get().resumes.find(r => r.id === resumeId)
+        if (!source) return ''
+        set(produce((s: ResumeStore) => { s.isLoading = true }))
+        try {
+          const copy = await resumeService.duplicateResume(uid, resumeId, source)
+          set(produce((s: ResumeStore) => {
+            s.resumes.unshift(copy)
+            s.isLoading = false
+          }))
+          return copy.id
+        } catch (err) {
+          set(produce((s: ResumeStore) => { s.isLoading = false }))
+          throw err
+        }
       },
     }),
     {
