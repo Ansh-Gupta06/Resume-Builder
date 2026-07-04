@@ -8,6 +8,7 @@ export const ROUTES = {
   SIGNUP: '/signup',
   FORGOT_PASSWORD: '/forgot-password',
   DASHBOARD: '/dashboard',
+  PROFILE: '/profile',
   EDITOR: (id: string) => `/editor/${id}`,
   PREVIEW: (id: string) => `/preview/${id}`,
 } as const

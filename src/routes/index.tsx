@@ -9,6 +9,7 @@ import LoginPage from '@/pages/LoginPage'
 import SignupPage from '@/pages/SignupPage'
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import DashboardPage from '@/pages/DashboardPage'
+import ProfilePage from '@/pages/ProfilePage'
 import ResumeBuilderPage from '@/pages/ResumeBuilderPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
           {
             path: '/dashboard',
             element: <DashboardPage />,
+          },
+          {
+            path: '/profile',
+            element: <ProfilePage />,
           },
           {
             path: '/editor/:resumeId',
