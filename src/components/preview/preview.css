@@ -292,12 +292,15 @@
   position: absolute;
   top: 0;
   left: 0;
+  /* Horizontal padding ensures template content never touches the page edge.
+     Applies universally across all 50+ templates in both preview and PDF. */
+  padding: 0 20px;
+  box-sizing: border-box;
   background: #ffffff;
   color: #000000;
   transform-origin: top left;
   will-change: transform;
   overflow: visible;
-  box-sizing: border-box;
 }
 
 .preview-a4 * {

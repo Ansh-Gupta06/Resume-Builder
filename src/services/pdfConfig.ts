@@ -1,7 +1,10 @@
 import type { ExportMargin } from '@/types/export'
 
 const A4_MM = { width: 210, height: 297 } as const
-const DEFAULT_MARGIN: ExportMargin = [8, 8, 8, 8]
+// Margins are set to 0 because the resume templates manage their own internal
+// padding. Adding external margins here would clip content on the right side
+// since the element is rendered at exactly 794px (full A4 width at 96dpi).
+const DEFAULT_MARGIN: ExportMargin = [0, 0, 0, 0]
 const DEFAULT_SCALE = 2
 
 type JsPdfOptions = {

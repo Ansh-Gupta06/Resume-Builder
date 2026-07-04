@@ -14,6 +14,12 @@ const PAGE_BREAK_AVOID_SELECTORS = [
   'h3',
 ]
 
+// Horizontal padding baked into the cloned element on each side.
+// PDF margins stay at 0 (to prevent html2pdf from clipping content),
+// and whitespace is created inside the rendered area instead.
+// At A4 width (794px = 210mm): 20px ≈ 5.3mm per side.
+const PDF_HORIZONTAL_PADDING_PX = 20
+
 let libLoadPromise: Promise<void> | null = null
 
 function loadLib(): Promise<void> {
@@ -65,13 +71,26 @@ function applyPageBreakClasses(el: HTMLElement): void {
 function prepareElement(source: HTMLElement): HTMLElement {
   const clone = source.cloneNode(true) as HTMLElement
 
+  // Remove zoom transform applied by the preview controls
   clone.style.transform = 'none'
   clone.style.transformOrigin = 'unset'
   clone.style.position = 'static'
+
+  // Keep total rendered width at exactly 794px (A4 at 96 dpi).
+  // With box-sizing: border-box the horizontal padding is included in that
+  // 794px, so the template content renders in (794 - 2 * padding) px —
+  // producing clean whitespace on the left and right in the PDF.
   clone.style.width = '794px'
+  clone.style.boxSizing = 'border-box'
+  clone.style.paddingLeft = `${String(PDF_HORIZONTAL_PADDING_PX)}px`
+  clone.style.paddingRight = `${String(PDF_HORIZONTAL_PADDING_PX)}px`
+
   clone.style.minHeight = 'auto'
   clone.style.background = '#ffffff'
   clone.style.overflow = 'visible'
+
+  // Activate print.css rules (font smoothing, color accuracy, no animations)
+  clone.classList.add('pdf-export-root')
 
   applyPageBreakClasses(clone)
 
@@ -85,14 +104,22 @@ export async function exportToPdf(
   const source = document.querySelector<HTMLElement>(`[data-pdf-target="${targetAttribute}"]`)
 
   if (!source) {
-    throw new ExportError('DOM_MISSING', 'Resume preview element not found. Ensure the preview is visible before exporting.')
+    throw new ExportError(
+      'DOM_MISSING',
+      'Resume preview element not found. Ensure the preview is visible before exporting.',
+    )
   }
 
   await loadLib().catch(() => {
-    throw new ExportError('LIB_LOAD_FAIL', 'Could not load the PDF library. Check your internet connection and try again.')
+    throw new ExportError(
+      'LIB_LOAD_FAIL',
+      'Could not load the PDF library. Check your internet connection and try again.',
+    )
   })
 
-  const html2pdf = (window as unknown as Record<string, unknown>)['html2pdf'] as ((...args: unknown[]) => unknown) | undefined
+  const html2pdf = (window as unknown as Record<string, unknown>)['html2pdf'] as
+    | ((...args: unknown[]) => unknown)
+    | undefined
 
   if (typeof html2pdf !== 'function') {
     throw new ExportError('LIB_LOAD_FAIL', 'PDF library loaded but is not accessible.')
@@ -102,8 +129,25 @@ export async function exportToPdf(
   const options = buildPdfOptions(filename)
   const element = prepareElement(source)
 
+  // CRITICAL: html2canvas cannot resolve CSS stylesheets for detached nodes.
+  // Attach the clone off-screen so all computed styles are available.
+  element.style.position = 'fixed'
+  element.style.top = '-99999px'
+  element.style.left = '-99999px'
+  element.style.zIndex = '-9999'
+  document.body.appendChild(element)
+
+  // Double rAF: first frame ensures React state is committed to the DOM,
+  // second frame ensures the browser has fully painted before capture.
+  await new Promise<void>(resolve => {
+    requestAnimationFrame(() => { requestAnimationFrame(() => { resolve() }) })
+  })
+
   const exportPromise = new Promise<void>((resolve, reject) => {
-    void (html2pdf as (el: HTMLElement, opts: unknown) => { save: () => Promise<void> })(element, options)
+    void (html2pdf as (el: HTMLElement, opts: unknown) => { save: () => Promise<void> })(
+      element,
+      options,
+    )
       .save()
       .then(resolve)
       .catch(() => {
@@ -113,9 +157,21 @@ export async function exportToPdf(
 
   const timeoutPromise = new Promise<never>((_, reject) => {
     setTimeout(() => {
-      reject(new ExportError('TIMEOUT', 'PDF export timed out. Try with a shorter resume or check your browser settings.'))
+      reject(
+        new ExportError(
+          'TIMEOUT',
+          'PDF export timed out. Try with a shorter resume or check your browser settings.',
+        ),
+      )
     }, EXPORT_TIMEOUT_MS)
   })
 
-  await Promise.race([exportPromise, timeoutPromise])
+  try {
+    await Promise.race([exportPromise, timeoutPromise])
+  } finally {
+    // Always remove the off-screen clone from DOM to prevent memory leaks
+    if (element.parentNode) {
+      element.parentNode.removeChild(element)
+    }
+  }
 }
