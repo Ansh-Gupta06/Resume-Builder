@@ -11,6 +11,7 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
 import DashboardPage from '@/pages/DashboardPage'
 import ProfilePage from '@/pages/ProfilePage'
 import ResumeBuilderPage from '@/pages/ResumeBuilderPage'
+import SharedResumePage from '@/pages/SharedResumePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
 export const router = createBrowserRouter([
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
     ],
+  },
+  {
+    path: '/share/:shareId',
+    element: <SharedResumePage />,
   },
   {
     element: <PublicRoute />,

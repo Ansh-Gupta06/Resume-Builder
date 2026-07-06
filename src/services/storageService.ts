@@ -18,7 +18,7 @@ export function uploadAvatar(_uid: string, file: File): Promise<string> {
         reject(new Error('Failed to read file as data URL'))
       }
     }
-    reader.onerror = () => reject(new Error('File read error'))
+    reader.onerror = () => { reject(new Error('File read error')) }
     reader.readAsDataURL(file)
   })
 }

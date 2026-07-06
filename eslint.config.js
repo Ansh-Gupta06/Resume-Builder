@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import prettierConfig from 'eslint-config-prettier'
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', 'JadeAI', '*.config.js', '*.config.ts'] },
+  { ignores: ['dist', 'node_modules', 'JadeAI', '*.config.js', '*.config.ts', 'api/**'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked],
     files: ['**/*.{ts,tsx}'],
@@ -25,7 +25,7 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/no-floating-promises': 'error',

@@ -11,13 +11,17 @@ export const ROUTES = {
   PROFILE: '/profile',
   EDITOR: (id: string) => `/editor/${id}`,
   PREVIEW: (id: string) => `/preview/${id}`,
+  SHARE: (shareId: string) => `/share/${shareId}`,
 } as const
 
 export const STORAGE_KEYS = {
   AUTH: 'rc_auth',
   RESUME: 'rc_resume',
+  SHARE: 'rc_share',
   THEME: 'rc_theme',
 } as const
+
+export const SHARE_API_BASE = '/api/share'
 
 export const TEMPLATE_IDS = [
   'academic',

@@ -12,6 +12,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
   },
   "dependencies": {
+    "@vercel/blob": "^2.5.0",
+    "@vercel/node": "^5.8.22",
     "firebase": "^12.14.0",
     "immer": "^11.1.8",
     "react": "^18.3.1",

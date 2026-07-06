@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useResumeStore } from '@/store/resumeStore'
+import { useShareStore } from '@/store/shareStore'
 import { useResumeData } from '@/hooks/useResumeData'
 import { ROUTES, type TemplateId } from '@/constants'
 import { toast } from '@/store/toastStore'
@@ -11,6 +12,7 @@ import SearchBar from '@/components/dashboard/SearchBar'
 import FilterSortBar, { type SortOrder } from '@/components/dashboard/FilterSortBar'
 import DeleteConfirmModal from '@/components/dashboard/DeleteConfirmModal'
 import CreateResumeModal from '@/components/dashboard/CreateResumeModal'
+import ShareModal from '@/components/dashboard/ShareModal'
 import type { Resume } from '@/types/resume'
 
 function ResumeCardSkeleton() {
@@ -112,12 +114,14 @@ export default function DashboardPage() {
   const createResume = useResumeStore(s => s.createResume)
   const duplicateResume = useResumeStore(s => s.duplicateResume)
   const deleteResume = useResumeStore(s => s.deleteResume)
+  const shares = useShareStore(s => s.shares)
   const navigate = useNavigate()
 
   const { resumes, stats, isLoading } = useResumeData()
 
   const [showCreate, setShowCreate] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<Resume | null>(null)
+  const [shareTarget, setShareTarget] = useState<Resume | null>(null)
 
   const [searchQuery, setSearchQuery] = useState('')
   const [templateFilter, setTemplateFilter] = useState<TemplateId | ''>('')
@@ -154,6 +158,14 @@ export default function DashboardPage() {
     setDeleteTarget(null)
     toast.info('Resume deleted')
   }, [deleteTarget, deleteResume])
+
+  const handleShare = useCallback(
+    (id: string) => {
+      const resume = resumes.find(r => r.id === id) ?? null
+      setShareTarget(resume)
+    },
+    [resumes]
+  )
 
   return (
     <div className="p-6 md:p-8 animate-fade-in">
@@ -195,10 +207,7 @@ export default function DashboardPage() {
         {resumes.length > 0 && (
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="flex-1 min-w-0">
-              <SearchBar
-                value={searchQuery}
-                onChange={setSearchQuery}
-              />
+              <SearchBar value={searchQuery} onChange={setSearchQuery} />
             </div>
             <FilterSortBar
               templateFilter={templateFilter}
@@ -228,7 +237,9 @@ export default function DashboardPage() {
               <ResumeCard
                 key={resume.id}
                 resume={resume}
+                isShared={resume.id in shares}
                 isDuplicating={false}
+                onShare={handleShare}
                 onDuplicate={(id) => { handleDuplicate(id) }}
                 onDelete={(id) => {
                   const target = resumes.find((r) => r.id === id) ?? null
@@ -253,6 +264,12 @@ export default function DashboardPage() {
         isDeleting={false}
         onClose={() => { setDeleteTarget(null) }}
         onConfirm={() => { handleConfirmDelete() }}
+      />
+
+      <ShareModal
+        isOpen={shareTarget !== null}
+        resume={shareTarget}
+        onClose={() => { setShareTarget(null) }}
       />
     </div>
   )

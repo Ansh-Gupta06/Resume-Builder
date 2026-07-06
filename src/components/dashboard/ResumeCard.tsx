@@ -7,7 +7,9 @@ import type { Resume } from '@/types/resume'
 
 type ResumeCardProps = {
   resume: Resume
+  isShared: boolean
   isDuplicating: boolean
+  onShare: (id: string) => void
   onDuplicate: (id: string) => void
   onDelete: (id: string) => void
 }
@@ -18,7 +20,56 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
 })
 
-export default function ResumeCard({ resume, isDuplicating, onDuplicate, onDelete }: ResumeCardProps) {
+function ShareIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+    </svg>
+  )
+}
+
+function CopyIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  )
+}
+
+function TrashIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14H6L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M9 6V4h6v2" />
+    </svg>
+  )
+}
+
+export default function ResumeCard({
+  resume,
+  isShared,
+  isDuplicating,
+  onShare,
+  onDuplicate,
+  onDelete,
+}: ResumeCardProps) {
   const TemplateComponent = getTemplate(resume.templateId as TemplateId).component
   const normalizedResume = normalizeResume(resume)
   const formattedDate = dateFormatter.format(new Date(resume.updatedAt))
@@ -35,10 +86,15 @@ export default function ResumeCard({ resume, isDuplicating, onDuplicate, onDelet
           <TemplateComponent resume={normalizedResume} />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-        <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-2 flex items-end justify-between">
           <span className="text-[10px] font-semibold uppercase tracking-wider text-white/80 drop-shadow-md">
             {resume.templateId}
           </span>
+          {isShared && (
+            <span className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              Shared
+            </span>
+          )}
         </div>
       </Link>
 
@@ -56,6 +112,22 @@ export default function ResumeCard({ resume, isDuplicating, onDuplicate, onDelet
               Edit
             </Button>
           </Link>
+
+          <button
+            id={`share-${resume.id}`}
+            type="button"
+            onClick={() => { onShare(resume.id) }}
+            className={[
+              'p-1.5 rounded-md transition-colors opacity-0 group-hover:opacity-100',
+              isShared
+                ? 'text-emerald-400 hover:bg-emerald-500/10'
+                : 'text-neutral-500 hover:text-primary-400 hover:bg-primary-500/10',
+            ].join(' ')}
+            aria-label="Share resume"
+            title="Share"
+          >
+            <ShareIcon />
+          </button>
 
           <button
             id={`duplicate-${resume.id}`}
@@ -82,25 +154,5 @@ export default function ResumeCard({ resume, isDuplicating, onDuplicate, onDelet
         </div>
       </div>
     </article>
-  )
-}
-
-function CopyIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-    </svg>
-  )
-}
-
-function TrashIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="3 6 5 6 21 6" />
-      <path d="M19 6l-1 14H6L5 6" />
-      <path d="M10 11v6M14 11v6" />
-      <path d="M9 6V4h6v2" />
-    </svg>
   )
 }
