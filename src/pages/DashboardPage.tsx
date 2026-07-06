@@ -1,6 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuthStore, selectUser } from '@/store/authStore'
 import { useResumeStore } from '@/store/resumeStore'
 import { useResumeData } from '@/hooks/useResumeData'
 import { ROUTES, type TemplateId } from '@/constants'
@@ -110,19 +109,15 @@ function applyFiltersAndSort(
 }
 
 export default function DashboardPage() {
-  const user = useAuthStore(selectUser)
-  const syncCreate = useResumeStore((s) => s.syncCreate)
-  const syncDuplicate = useResumeStore((s) => s.syncDuplicate)
-  const syncDelete = useResumeStore((s) => s.syncDelete)
+  const createResume = useResumeStore(s => s.createResume)
+  const duplicateResume = useResumeStore(s => s.duplicateResume)
+  const deleteResume = useResumeStore(s => s.deleteResume)
   const navigate = useNavigate()
 
   const { resumes, stats, isLoading } = useResumeData()
 
   const [showCreate, setShowCreate] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<Resume | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
-  const [isDuplicating, setIsDuplicating] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
 
   const [searchQuery, setSearchQuery] = useState('')
   const [templateFilter, setTemplateFilter] = useState<TemplateId | ''>('')
@@ -136,59 +131,36 @@ export default function DashboardPage() {
   const isFiltered = Boolean(searchQuery || templateFilter)
 
   const handleCreate = useCallback(
-    async (title: string, templateId: TemplateId) => {
-      if (!user?.id || isCreating) return
-      setIsCreating(true)
-      try {
-        const id = await syncCreate(user.id, title, templateId)
-        setShowCreate(false)
-        toast.success('Resume created')
-        navigate(ROUTES.EDITOR(id))
-      } catch {
-        toast.error('Failed to create resume')
-      } finally {
-        setIsCreating(false)
-      }
+    (title: string, templateId: TemplateId) => {
+      const id = createResume(title, templateId)
+      setShowCreate(false)
+      toast.success('Resume created')
+      navigate(ROUTES.EDITOR(id))
     },
-    [user?.id, syncCreate, navigate, isCreating]
+    [createResume, navigate]
   )
 
   const handleDuplicate = useCallback(
-    async (id: string) => {
-      if (!user?.id || isDuplicating) return
-      setIsDuplicating(true)
-      try {
-        const newId = await syncDuplicate(user.id, id)
-        if (newId) toast.success('Resume duplicated')
-      } catch {
-        toast.error('Failed to duplicate resume')
-      } finally {
-        setIsDuplicating(false)
-      }
+    (id: string) => {
+      const newId = duplicateResume(id)
+      if (newId) toast.success('Resume duplicated')
     },
-    [user?.id, syncDuplicate, isDuplicating]
+    [duplicateResume]
   )
 
-  const handleConfirmDelete = useCallback(async () => {
-    if (!user?.id || !deleteTarget || isDeleting) return
-    setIsDeleting(true)
-    try {
-      await syncDelete(user.id, deleteTarget.id)
-      setDeleteTarget(null)
-      toast.info('Resume deleted')
-    } catch {
-      toast.error('Failed to delete resume')
-    } finally {
-      setIsDeleting(false)
-    }
-  }, [user?.id, deleteTarget, syncDelete, isDeleting])
+  const handleConfirmDelete = useCallback(() => {
+    if (!deleteTarget) return
+    deleteResume(deleteTarget.id)
+    setDeleteTarget(null)
+    toast.info('Resume deleted')
+  }, [deleteTarget, deleteResume])
 
   return (
     <div className="p-6 md:p-8 animate-fade-in">
       <div className="mb-8 flex-between flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-bold text-neutral-50">
-            {greeting()}, {user?.name.split(' ')[0] ?? 'there'} 👋
+            {greeting()}, there 👋
           </h1>
           <p className="text-neutral-400 text-sm mt-1">Manage and build your professional resumes.</p>
         </div>
@@ -256,8 +228,8 @@ export default function DashboardPage() {
               <ResumeCard
                 key={resume.id}
                 resume={resume}
-                isDuplicating={isDuplicating}
-                onDuplicate={(id) => { void handleDuplicate(id) }}
+                isDuplicating={false}
+                onDuplicate={(id) => { handleDuplicate(id) }}
                 onDelete={(id) => {
                   const target = resumes.find((r) => r.id === id) ?? null
                   setDeleteTarget(target)
@@ -270,17 +242,17 @@ export default function DashboardPage() {
 
       <CreateResumeModal
         isOpen={showCreate}
-        isCreating={isCreating}
+        isCreating={false}
         onClose={() => { setShowCreate(false) }}
-        onCreate={(title, templateId) => { void handleCreate(title, templateId) }}
+        onCreate={(title, templateId) => { handleCreate(title, templateId) }}
       />
 
       <DeleteConfirmModal
         isOpen={deleteTarget !== null}
         resumeTitle={deleteTarget?.title}
-        isDeleting={isDeleting}
+        isDeleting={false}
         onClose={() => { setDeleteTarget(null) }}
-        onConfirm={() => { void handleConfirmDelete() }}
+        onConfirm={() => { handleConfirmDelete() }}
       />
     </div>
   )

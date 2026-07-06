@@ -1,6 +1,3 @@
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { storage } from '@/lib/firebase'
-
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
 
@@ -10,9 +7,18 @@ export function validateAvatarFile(file: File): string | null {
   return null
 }
 
-export async function uploadAvatar(uid: string, file: File): Promise<string> {
-  const ext = file.type === 'image/jpeg' ? 'jpg' : file.type.split('/')[1]
-  const storageRef = ref(storage, `avatars/${uid}/avatar.${ext}`)
-  const snapshot = await uploadBytes(storageRef, file, { contentType: file.type })
-  return getDownloadURL(snapshot.ref)
+export function uploadAvatar(_uid: string, file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result
+      if (typeof result === 'string') {
+        resolve(result)
+      } else {
+        reject(new Error('Failed to read file as data URL'))
+      }
+    }
+    reader.onerror = () => reject(new Error('File read error'))
+    reader.readAsDataURL(file)
+  })
 }

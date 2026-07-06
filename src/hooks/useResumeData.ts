@@ -1,7 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { useAuthStore, selectUser } from '@/store/authStore'
+import { useMemo } from 'react'
 import { useResumeStore, selectResumes, selectIsLoading } from '@/store/resumeStore'
-import { toast } from '@/store/toastStore'
 
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000
 
@@ -19,44 +17,29 @@ export type UseResumeDataReturn = {
 }
 
 export function useResumeData(): UseResumeDataReturn {
-  const user = useAuthStore(selectUser)
   const resumes = useResumeStore(selectResumes)
   const isLoading = useResumeStore(selectIsLoading)
-  const loadResumes = useResumeStore(s => s.loadResumes)
-  const loadedRef = useRef(false)
 
-  useEffect(() => {
-    if (!user?.id || loadedRef.current) return
-    loadedRef.current = true
-    loadResumes(user.id).catch(() => {
-      toast.error('Failed to load resumes')
-    })
-  }, [user?.id, loadResumes])
+  const stats = useMemo<ResumeStats>(() => {
+    const now = Date.now()
+    const recentlyUpdated = resumes.filter(
+      r => now - new Date(r.updatedAt).getTime() < SEVEN_DAYS_MS
+    ).length
 
-  useEffect(() => {
-    if (!user?.id) {
-      loadedRef.current = false
+    const lastActiveLabel =
+      resumes.length === 0
+        ? '—'
+        : new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
+            new Date(resumes[0].updatedAt)
+          )
+
+    return {
+      total: resumes.length,
+      recentlyUpdated,
+      templatesUsed: new Set(resumes.map(r => r.templateId)).size,
+      lastActiveLabel,
     }
-  }, [user?.id])
-
-  const now = Date.now()
-  const recentlyUpdated = resumes.filter(
-    r => now - new Date(r.updatedAt).getTime() < SEVEN_DAYS_MS
-  ).length
-
-  const lastActiveLabel =
-    resumes.length === 0
-      ? '—'
-      : new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(
-          new Date(resumes[0].updatedAt)
-        )
-
-  const stats: ResumeStats = {
-    total: resumes.length,
-    recentlyUpdated,
-    templatesUsed: new Set(resumes.map(r => r.templateId)).size,
-    lastActiveLabel,
-  }
+  }, [resumes])
 
   return { resumes, stats, isLoading }
 }
