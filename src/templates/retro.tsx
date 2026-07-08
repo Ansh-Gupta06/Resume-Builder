@@ -19,7 +19,7 @@ export function RetroTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] shadow-lg" style={{ fontFamily: "'Georgia', 'Times New Roman', serif", backgroundColor: BG }}>
+    <div className="mx-auto max-w-full flex-1 shadow-lg" style={{ fontFamily: "'Georgia', 'Times New Roman', serif", backgroundColor: BG }}>
       <div className="border-b-8 px-8 py-8 text-center" style={{ borderColor: PRIMARY }}>
         {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={80} className="mx-auto mb-4" wrapperStyle={{ border: `4px solid ${PRIMARY}` }} />}
         <h1 className="text-3xl font-black tracking-wider" style={{ color: PRIMARY }}>{pi.fullName || 'Your Name'}</h1>

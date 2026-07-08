@@ -19,7 +19,7 @@ export function NordicTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: BG }}>
+    <div className="mx-auto max-w-full flex-1 shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: BG }}>
       <div className="px-8 py-7" style={{ backgroundColor: PRIMARY }}>
         <div className="flex items-center gap-5 text-white">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={72} className="shrink-0" wrapperStyle={{ border: `3px solid ${ACCENT}` }} />}

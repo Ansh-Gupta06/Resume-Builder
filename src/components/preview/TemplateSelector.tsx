@@ -64,7 +64,7 @@ export default function TemplateSelector({ resumeId, activeTemplateId }: Props) 
               }`}
             >
               <div className="w-full aspect-[210/297] rounded-sm bg-neutral-900 overflow-hidden relative border border-neutral-700/50 group-hover:border-neutral-500/50 transition-colors">
-                <div className="absolute top-0 left-1/2 w-[794px] h-[1123px] origin-top pointer-events-none bg-white" style={{ transform: 'translateX(-50%) scale(0.08)' }}>
+                <div className="absolute top-0 left-1/2 w-[794px] h-[1123px] flex flex-col origin-top pointer-events-none bg-white" style={{ transform: 'translateX(-50%) scale(0.08)' }}>
                   <t.component resume={normalizeResume(MOCK_RESUME)} />
                 </div>
               </div>

@@ -18,7 +18,7 @@ export function ModernTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative overflow-hidden px-8 py-7" style={{ background: `linear-gradient(135deg, ${PRIMARY} 0%, ${ACCENT} 100%)` }}>
         <div className="absolute -bottom-8 -right-8 h-32 w-32 rounded-full bg-white/10" />
         <div className="relative flex items-center gap-5 text-white">

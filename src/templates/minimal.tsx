@@ -16,7 +16,7 @@ export function MinimalTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white p-10 shadow-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 bg-white p-10 shadow-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">

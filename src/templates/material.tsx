@@ -14,7 +14,7 @@ export function MaterialTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative overflow-hidden px-8 py-7" style={{ background: `linear-gradient(135deg, ${PRIMARY}, ${VIOLET})` }}>
         <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
         <div className="absolute bottom-0 right-16 h-20 w-20 rounded-full bg-white/5" />

@@ -22,7 +22,7 @@ export function DeveloperTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] overflow-hidden shadow-lg" style={{ fontFamily: "'JetBrains Mono', 'Courier New', monospace", backgroundColor: BG }}>
+    <div className="m-0 p-0 w-full flex-1 overflow-hidden" style={{ fontFamily: "'JetBrains Mono', 'Courier New', monospace", backgroundColor: BG }}>
       <div className="px-8 py-6">
         <div className="flex items-center gap-4">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={64} className="shrink-0" wrapperStyle={{ border: `2px solid ${GREEN}` }} />}

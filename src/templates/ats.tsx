@@ -12,7 +12,8 @@ export function AtsTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
+      <div className="px-8 py-8">
       <div className={`mb-4 ${pi.avatar ? 'flex items-center gap-4' : 'text-center'}`}>
         {pi.avatar && <AvatarImage src={pi.avatar} size={64} avatarStyle="circle" wrapperClassName="shrink-0 overflow-hidden" />}
         <div>
@@ -170,6 +171,7 @@ export function AtsTemplate({ resume }: TemplateProps) {
           </div>
         </div>
       )}
+    </div>
     </div>
   )
 }

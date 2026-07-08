@@ -20,7 +20,7 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="px-10 py-8">
         <div className="flex items-center gap-6">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={88} className="shrink-0" wrapperStyle={{ border: `3px solid ${EMERALD}` }} />}

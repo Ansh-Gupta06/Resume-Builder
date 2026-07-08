@@ -17,7 +17,7 @@ export function DesignerTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative overflow-hidden bg-zinc-900 px-8 py-8 text-white">
         <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-10" style={{ backgroundColor: CORAL }} />
         <div className="flex items-center gap-5">

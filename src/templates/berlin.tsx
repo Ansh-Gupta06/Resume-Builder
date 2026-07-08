@@ -21,7 +21,7 @@ export function BerlinTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] overflow-hidden bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 overflow-hidden bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative px-10 py-8 text-white" style={{ backgroundColor: '#000000' }}>
         <div className="absolute right-8 top-4 h-20 w-20 rounded-full border-4" style={{ borderColor: YELLOW, opacity: 0.6 }} />
         <div className="absolute right-24 bottom-3 h-8 w-8" style={{ backgroundColor: RED_B, opacity: 0.7 }} />

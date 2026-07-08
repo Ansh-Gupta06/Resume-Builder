@@ -10,7 +10,8 @@ export function CleanTemplate({ resume }: TemplateProps) {
   const vis = new Set(resume.visibleSections)
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="px-8 py-8">
       <div className="mb-6">
         <div className="flex items-center gap-4">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={64} className="shrink-0" style={{ border: `2px solid ${BLUE}` }} />}
@@ -186,6 +187,7 @@ export function CleanTemplate({ resume }: TemplateProps) {
           </div>
         </div>
       )}
+    </div>
     </div>
   )
 }

@@ -19,7 +19,7 @@ export function ArtisticTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] overflow-hidden bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 overflow-hidden bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative px-10 py-8 text-white" style={{ background: PRIMARY }}>
         <div className="absolute right-6 top-4 h-24 w-24 rounded-full opacity-20" style={{ backgroundColor: ACCENT }} />
         <div className="absolute right-16 bottom-2 h-12 w-12 rounded-full opacity-30" style={{ backgroundColor: HIGHLIGHT }} />

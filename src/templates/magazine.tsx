@@ -17,7 +17,7 @@ export function MagazineTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="px-8 py-7">
         <div className="mb-4 h-2 w-full" style={{ background: `linear-gradient(90deg, ${ACCENT}, ${PRIMARY})` }} />
         <div className="flex items-end gap-5">

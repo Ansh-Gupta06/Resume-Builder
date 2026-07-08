@@ -19,7 +19,7 @@ export function JapaneseTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="px-8 py-8 text-center">
         {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={88} className="mx-auto mb-4" wrapperStyle={{ border: `1px solid ${ACCENT}` }} />}
         <h1 className="text-2xl font-bold tracking-[0.1em]" style={{ color: PRIMARY }}>{pi.fullName || 'Your Name'}</h1>

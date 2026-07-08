@@ -22,13 +22,14 @@ export function ArchitectTemplate({ resume }: TemplateProps) {
 
   return (
     <div
-      className="mx-auto max-w-[210mm] bg-white shadow-lg"
+      className="m-0 p-0 w-full flex-1 bg-white"
       style={{
         fontFamily: 'Inter, sans-serif',
         backgroundImage: `linear-gradient(${GRID} 1px, transparent 1px), linear-gradient(90deg, ${GRID} 1px, transparent 1px)`,
         backgroundSize: '40px 40px',
       }}
     >
+      <div className="px-8 py-8">
       <div className="mb-6 border-b-2 pb-5" style={{ borderColor: PRIMARY }}>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
@@ -234,6 +235,7 @@ export function ArchitectTemplate({ resume }: TemplateProps) {
           </div>
         </div>
       )}
+    </div>
     </div>
   )
 }

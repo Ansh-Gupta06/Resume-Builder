@@ -19,7 +19,7 @@ export function WatercolorTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: WASH }}>
+    <div className="mx-auto max-w-full flex-1 shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: WASH }}>
       <div className="relative overflow-hidden px-8 py-10 text-center">
         <div className="absolute inset-0 opacity-20" style={{ background: `radial-gradient(ellipse at top left, ${ACCENT}, transparent 60%), radial-gradient(ellipse at bottom right, ${PRIMARY}, transparent 60%)` }} />
         <div className="relative">

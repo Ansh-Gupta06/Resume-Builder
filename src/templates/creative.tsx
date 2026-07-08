@@ -17,7 +17,7 @@ export function CreativeTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative overflow-hidden px-8 py-8 text-white" style={{ background: `linear-gradient(135deg, ${PRIMARY}, ${ACCENT})` }}>
         <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full opacity-20" style={{ backgroundColor: 'white' }} />
         <div className="absolute -right-4 bottom-4 h-16 w-16 rounded-full opacity-10" style={{ backgroundColor: 'white' }} />

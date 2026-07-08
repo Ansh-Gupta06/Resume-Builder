@@ -21,7 +21,7 @@ export function NeonTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] overflow-hidden shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: BG }}>
+    <div className="mx-auto max-w-full flex-1 overflow-hidden shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: BG }}>
       <div className="relative px-10 py-8" style={{ borderBottom: `2px solid ${CYAN}`, boxShadow: `0 2px 20px ${CYAN}40` }}>
         <div className="flex items-center gap-5">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={80} wrapperClassName="shrink-0 p-0.5" wrapperStyle={{ border: `2px solid ${CYAN}`, boxShadow: `0 0 12px ${CYAN}60` }} />}

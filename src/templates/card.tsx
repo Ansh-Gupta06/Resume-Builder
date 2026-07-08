@@ -24,7 +24,8 @@ export function CardTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="px-8 py-8">
       <div className="mb-6 text-center">
         {pi.avatar && <AvatarImage src={pi.avatar} size={80} avatarStyle="circle" className="mx-auto mb-3" style={{ border: `3px solid ${ACCENT}` }} />}
         <h1 className="text-2xl font-bold" style={{ color: PRIMARY }}>{pi.fullName || 'Your Name'}</h1>
@@ -180,6 +181,7 @@ export function CardTemplate({ resume }: TemplateProps) {
           </div>
         </Section>
       )}
+    </div>
     </div>
   )
 }

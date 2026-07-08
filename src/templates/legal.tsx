@@ -19,7 +19,7 @@ export function LegalTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+    <div className="mx-auto max-w-full flex-1 bg-white shadow-lg" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
       <div className="border-b-4 px-10 py-7" style={{ borderColor: PRIMARY }}>
         <div className="flex items-center gap-5">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={72} className="shrink-0" wrapperStyle={{ border: `2px solid ${PRIMARY}` }} />}

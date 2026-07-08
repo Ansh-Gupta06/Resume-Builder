@@ -14,7 +14,7 @@ export function TwoColumnTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto flex max-w-[210mm] overflow-hidden bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif', minHeight: '297mm' }}>
+    <div className="mx-auto flex max-w-full flex-1 overflow-hidden bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif', minHeight: '297mm' }}>
       <div className="w-[35%] shrink-0 p-6 text-white" style={{ background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)' }}>
         <div className="mb-6 text-center">
           {pi.avatar && <AvatarImage src={pi.avatar} size={80} avatarStyle="circle" wrapperClassName="mx-auto mb-3 w-fit overflow-hidden" />}

@@ -21,6 +21,11 @@ type Html2CanvasOptions = {
   backgroundColor: string
   imageTimeout: number
   removeContainer: boolean
+  scrollX?: number
+  scrollY?: number
+  x?: number
+  y?: number
+  windowWidth?: number
 }
 
 type PageBreakOptions = {
@@ -58,6 +63,11 @@ export function buildPdfOptions(filename: string, scale = DEFAULT_SCALE): Html2P
       backgroundColor: '#ffffff',
       imageTimeout: 15000,
       removeContainer: true,
+      scrollX: 0,
+      scrollY: 0,
+      x: 0,
+      y: 0,
+      windowWidth: 794,
     },
     pagebreak: {
       mode: ['css', 'legacy'],

@@ -7,8 +7,14 @@ export function CompactTemplate({ resume }: TemplateProps) {
   const pi = resume.personalInfo
   const vis = resume.visibleSections
 
+  const hasLeftColumn = 
+    (vis.includes('skills') && resume.skills.length > 0) ||
+    (vis.includes('languages') && resume.languages.length > 0) ||
+    (vis.includes('certifications') && resume.certifications.length > 0) ||
+    (vis.includes('awards') && resume.awards.length > 0)
+
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="border-b border-zinc-200 px-6 py-4">
         <div className="flex items-center gap-3">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={48} className="shrink-0" />}
@@ -33,62 +39,64 @@ export function CompactTemplate({ resume }: TemplateProps) {
       </div>
 
       <div className="flex">
-        <div className="w-[32%] shrink-0 border-r border-zinc-100 bg-zinc-50 p-4">
-          {vis.includes('skills') && resume.skills.length > 0 && (
-            <div className="mb-4" data-section>
-              <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Skills</h2>
-              <div className="space-y-1.5">
-                {resume.skills.map(skill => (
-                  <div key={skill.id}>
-                    <p className="text-[10px] font-semibold text-zinc-600">{skill.category}</p>
-                    <p className="text-[10px] text-zinc-500">{skill.items.join(', ')}</p>
-                  </div>
-                ))}
+        {hasLeftColumn && (
+          <div className="w-[32%] shrink-0 border-r border-zinc-100 bg-zinc-50 p-4">
+            {vis.includes('skills') && resume.skills.length > 0 && (
+              <div className="mb-4" data-section>
+                <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Skills</h2>
+                <div className="space-y-1.5">
+                  {resume.skills.map(skill => (
+                    <div key={skill.id}>
+                      <p className="text-[10px] font-semibold text-zinc-600">{skill.category}</p>
+                      <p className="text-[10px] text-zinc-500">{skill.items.join(', ')}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          {vis.includes('languages') && resume.languages.length > 0 && (
-            <div className="mb-4" data-section>
-              <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Languages</h2>
-              <div className="space-y-0.5">
-                {resume.languages.map(lang => (
-                  <div key={lang.id} className="flex items-center justify-between text-[10px]">
-                    <span className="font-medium text-zinc-700">{lang.language}</span>
-                    <span className="text-zinc-400">{lang.proficiency}</span>
-                  </div>
-                ))}
+            )}
+            {vis.includes('languages') && resume.languages.length > 0 && (
+              <div className="mb-4" data-section>
+                <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Languages</h2>
+                <div className="space-y-0.5">
+                  {resume.languages.map(lang => (
+                    <div key={lang.id} className="flex items-center justify-between text-[10px]">
+                      <span className="font-medium text-zinc-700">{lang.language}</span>
+                      <span className="text-zinc-400">{lang.proficiency}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          {vis.includes('certifications') && resume.certifications.length > 0 && (
-            <div className="mb-4" data-section>
-              <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Certifications</h2>
-              <div className="space-y-1">
-                {resume.certifications.map(cert => (
-                  <div key={cert.id}>
-                    <p className="text-[10px] font-semibold text-zinc-700">{cert.name}</p>
-                    {(cert.issuer || cert.date) && <p className="text-[9px] text-zinc-400">{cert.issuer}{cert.date ? ` (${cert.date})` : ''}</p>}
-                  </div>
-                ))}
+            )}
+            {vis.includes('certifications') && resume.certifications.length > 0 && (
+              <div className="mb-4" data-section>
+                <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Certifications</h2>
+                <div className="space-y-1">
+                  {resume.certifications.map(cert => (
+                    <div key={cert.id}>
+                      <p className="text-[10px] font-semibold text-zinc-700">{cert.name}</p>
+                      {(cert.issuer || cert.date) && <p className="text-[9px] text-zinc-400">{cert.issuer}{cert.date ? ` (${cert.date})` : ''}</p>}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          {vis.includes('awards') && resume.awards.length > 0 && (
-            <div className="mb-4" data-section>
-              <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Awards</h2>
-              <div className="space-y-1.5">
-                {resume.awards.map(award => (
-                  <div key={award.id}>
-                    <p className="text-[10px] font-semibold text-zinc-700">{award.title}</p>
-                    {award.issuer && <p className="text-[9px] text-zinc-500">{award.issuer}</p>}
-                    {award.date && <p className="text-[9px] text-zinc-400">{award.date}</p>}
-                    {award.description && <p className="text-[9px] text-zinc-400" dangerouslySetInnerHTML={{ __html: md(award.description) }} />}
-                  </div>
-                ))}
+            )}
+            {vis.includes('awards') && resume.awards.length > 0 && (
+              <div className="mb-4" data-section>
+                <h2 className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Awards</h2>
+                <div className="space-y-1.5">
+                  {resume.awards.map(award => (
+                    <div key={award.id}>
+                      <p className="text-[10px] font-semibold text-zinc-700">{award.title}</p>
+                      {award.issuer && <p className="text-[9px] text-zinc-500">{award.issuer}</p>}
+                      {award.date && <p className="text-[9px] text-zinc-400">{award.date}</p>}
+                      {award.description && <p className="text-[9px] text-zinc-400" dangerouslySetInnerHTML={{ __html: md(award.description) }} />}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         <div className="flex-1 p-4">
           {vis.includes('summary') && pi.summary && (

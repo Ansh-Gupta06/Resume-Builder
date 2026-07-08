@@ -17,7 +17,7 @@ export function ProfessionalTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="px-10 py-7" style={{ borderTop: `6px solid ${PRIMARY}` }}>
         <div className="flex items-center justify-between gap-5">
           <div className="flex items-center gap-4">

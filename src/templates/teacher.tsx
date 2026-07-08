@@ -20,7 +20,7 @@ export function TeacherTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: WARM_BG }}>
+    <div className="mx-auto max-w-full flex-1 shadow-lg" style={{ fontFamily: 'Inter, sans-serif', backgroundColor: WARM_BG }}>
       <div className="px-8 py-7" style={{ background: `linear-gradient(135deg, ${PRIMARY}, ${ACCENT})` }}>
         <div className="flex items-center gap-5 text-white">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={72} className="shrink-0" wrapperStyle={{ border: '3px solid white' }} />}

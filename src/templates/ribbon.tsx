@@ -20,7 +20,7 @@ export function RibbonTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative" style={{ borderTop: `6px solid ${RIBBON}` }}>
         <div className="px-8 py-7">
           <div className="flex items-center gap-5">

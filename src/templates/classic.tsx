@@ -11,7 +11,8 @@ export function ClassicTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="px-8 py-8">
       <div className="mb-6 border-b-2 border-zinc-800 pb-4">
         <div className="flex items-center justify-center gap-4">
           {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={64} className="shrink-0" />}
@@ -178,6 +179,7 @@ export function ClassicTemplate({ resume }: TemplateProps) {
           </div>
         </div>
       )}
+    </div>
     </div>
   )
 }

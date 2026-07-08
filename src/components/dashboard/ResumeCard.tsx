@@ -82,7 +82,7 @@ export default function ResumeCard({
         aria-label={`Edit ${resume.title}`}
         tabIndex={0}
       >
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[794px] h-[1123px] origin-top scale-[0.20] pointer-events-none bg-white">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[794px] h-[1123px] flex flex-col origin-top scale-[0.20] pointer-events-none bg-white">
           <TemplateComponent resume={normalizedResume} />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />

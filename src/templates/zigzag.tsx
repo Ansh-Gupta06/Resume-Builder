@@ -20,7 +20,7 @@ export function ZigzagTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] overflow-hidden bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="mx-auto max-w-full flex-1 overflow-hidden bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative overflow-hidden" style={{ backgroundColor: PRIMARY }}>
         <div className="absolute inset-0">
           {[0, 1, 2, 3, 4].map(i => (

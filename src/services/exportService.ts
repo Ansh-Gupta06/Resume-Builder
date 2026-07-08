@@ -14,11 +14,7 @@ const PAGE_BREAK_AVOID_SELECTORS = [
   'h3',
 ]
 
-// Horizontal padding baked into the cloned element on each side.
-// PDF margins stay at 0 (to prevent html2pdf from clipping content),
-// and whitespace is created inside the rendered area instead.
-// At A4 width (794px = 210mm): 20px ≈ 5.3mm per side.
-const PDF_HORIZONTAL_PADDING_PX = 20
+const PDF_HORIZONTAL_PADDING_PX = 0
 
 let libLoadPromise: Promise<void> | null = null
 
@@ -131,9 +127,9 @@ export async function exportToPdf(
 
   // CRITICAL: html2canvas cannot resolve CSS stylesheets for detached nodes.
   // Attach the clone off-screen so all computed styles are available.
-  element.style.position = 'fixed'
-  element.style.top = '-99999px'
-  element.style.left = '-99999px'
+  element.style.position = 'absolute'
+  element.style.top = '0px'
+  element.style.left = '0px'
   element.style.zIndex = '-9999'
   document.body.appendChild(element)
 

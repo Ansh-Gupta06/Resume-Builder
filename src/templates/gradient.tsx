@@ -17,7 +17,7 @@ export function GradientTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative overflow-hidden px-8 py-8 text-white" style={{ background: `linear-gradient(135deg, ${ACCENT}, ${ACCENT2})` }}>
         <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(ellipse at top right, white, transparent)' }} />
         <div className="relative flex items-center gap-5">

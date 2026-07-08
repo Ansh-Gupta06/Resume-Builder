@@ -8,7 +8,8 @@ export function AcademicTemplate({ resume }: TemplateProps) {
   const contacts = [pi.age, pi.gender, pi.hometown, pi.maritalStatus, pi.yearsOfExperience, pi.educationLevel, pi.email, pi.phone, pi.wechat, pi.location, pi.website].filter(Boolean)
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: '"Computer Modern", "CMU Serif", Georgia, "Times New Roman", serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: '"Computer Modern", "CMU Serif", Georgia, "Times New Roman", serif' }}>
+      <div className="px-8 py-8">
       <div className="mb-6">
         <div className={pi.avatar ? 'flex items-center gap-4' : 'text-center'}>
           {pi.avatar && (
@@ -174,6 +175,7 @@ export function AcademicTemplate({ resume }: TemplateProps) {
           </div>
         </div>
       )}
+    </div>
     </div>
   )
 }

@@ -17,7 +17,7 @@ export function ElegantTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
       <div className="mb-6 border-b pb-8 pt-8 text-center" style={{ borderColor: GOLD }}>
         {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={80} className="mx-auto mb-4" wrapperStyle={{ border: `2px solid ${GOLD}` }} />}
         <h1 className="text-3xl font-bold tracking-widest" style={{ color: PRIMARY }}>{pi.fullName || 'Your Name'}</h1>

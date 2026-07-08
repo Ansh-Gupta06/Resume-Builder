@@ -17,7 +17,7 @@ export function InfographicTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="relative overflow-hidden px-8 py-8" style={{ backgroundColor: SECONDARY }}>
         <div className="absolute right-0 top-0 h-full w-2" style={{ backgroundColor: PRIMARY }} />
         <div className="flex items-center gap-5 text-white">

@@ -14,7 +14,7 @@ export function FormalTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] bg-white shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="m-0 p-0 w-full flex-1 bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       <div className="px-8 py-6 text-center" style={{ backgroundColor: DARK_GREEN }}>
         {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={72} className="mx-auto mb-3" wrapperStyle={{ border: '3px solid white' }} />}
         <h1 className="text-2xl font-bold text-white">{pi.fullName || 'Your Name'}</h1>

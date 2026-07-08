@@ -18,7 +18,7 @@ export function LuxeTemplate({ resume }: TemplateProps) {
   )
 
   return (
-    <div className="mx-auto max-w-[210mm] shadow-lg" style={{ fontFamily: "'Georgia', 'Times New Roman', serif", backgroundColor: BG }}>
+    <div className="mx-auto max-w-full flex-1 shadow-lg" style={{ fontFamily: "'Georgia', 'Times New Roman', serif", backgroundColor: BG }}>
       <div className="px-12 pt-10 pb-6 text-center" style={{ borderBottom: `1px solid ${GOLD}` }}>
         {pi.avatar && <AvatarImage src={pi.avatar} avatarStyle="circle" size={80} className="mx-auto mb-4" wrapperStyle={{ border: `2px solid ${GOLD}` }} />}
         <h1 className="text-3xl font-bold tracking-[0.12em]" style={{ color: TEXT }}>{pi.fullName || 'Your Name'}</h1>
